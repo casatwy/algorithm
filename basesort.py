@@ -10,10 +10,12 @@ def getSingleNumber(number, positionFromRight):
 
 def countsort(numberList):
     counterList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    positionList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for number in numberList:
         counterList[number] += 1
 
     counter = 0
+    positionList = []
 
     for number in counterList:
         numberIndex = counterList.index(number)
@@ -24,17 +26,16 @@ def countsort(numberList):
                 continue
             else:
                 counter += number
-                counterList[numberIndex] = counter
+                positionList[numberIndex] = counter
 
-    print counterList
-
-    numberList.reverse()
     resultNumber = []
+
+    counter = 10
 
     for number in numberList:
         counterList[number] -= 1
         index = counterList[number]
-        resultNumber.insert(index, number)
+        resultNumber.append(number)
 
     return resultNumber
 
