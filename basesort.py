@@ -8,37 +8,50 @@ def getSingleNumber(number, positionFromRight):
         baseNumber = 10 ** (positionFromRight - 1)
         return int(modNumber / baseNumber)
 
-def countsort(numberList):
+def countsort(numberList, offset):
+
     counterList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    positionList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    shouldEnd = True
+
     for number in numberList:
-        counterList[number] += 1
+        singleNumber = getSingleNumber(number, offset)
+        if singleNumber != 0:
+            shouldEnd = False
+        counterList[singleNumber] += 1
 
-    counter = 0
-    positionList = []
+    if shouldEnd and offset != 1:
+        return False
 
-    for number in counterList:
-        numberIndex = counterList.index(number)
-        if numberIndex == 0:
-            counter = number
+    for index in range(0, 10):
+        if index == 0:
+            continue
+        counterList[index] = counterList[index-1] + counterList[index]
+
+    resultList = numberList
+    for number in numberList[::-1]:
+        singleNumber = getSingleNumber(number, offset)
+        position = counterList[singleNumber]
+        position = position - 1
+        resultList[position] = number
+        counterList[singleNumber] = position
+
+    return resultList
+
+def basesort(numberList):
+
+    offset = 0
+
+    while True:
+        offset = offset + 1
+        result = countsort(numberList, offset)
+
+        if not result:
+            break
         else:
-            if number == 0:
-                continue
-            else:
-                counter += number
-                positionList[numberIndex] = counter
+            numberList = result
 
-    resultNumber = []
+    return numberList
 
-    counter = 10
-
-    for number in numberList:
-        counterList[number] -= 1
-        index = counterList[number]
-        resultNumber.append(number)
-
-    return resultNumber
-
-data = [2,1,4,3]
-print countsort(data)
+data = [11231230,312341234120,223412340,123412342333550,624512423460,1435670,4676598660,465760,57880,9765670, 79235879245890]
+print basesort(data)
 
